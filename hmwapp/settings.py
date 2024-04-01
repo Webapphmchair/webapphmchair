@@ -154,3 +154,15 @@ EMAIL_USE_TLS = True  # or False if your SMTP server doesn't use TLS
 EMAIL_HOST_USER = 'webapphostemail@gmail.com'  # Your email address used for sending emails
 EMAIL_HOST_PASSWORD = 'WEBAPPHOSTemail.1'  # Your email password
 DEFAULT_FROM_EMAIL = 'webapphostemail@gmail.com'  # The default email address to use for sending emails
+
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'webapphmchair_postgresql',  # Replace with your database name
+        'USER': 'webapphmchair_postgresql_user',  # Replace with your database username
+        'PASSWORD': '7EPME2QsohiofN0KkFxzCUbTVJYtFlbl',  # Replace with your database password
+        'HOST': 'dpg-co545kv79t8c739dmh70-a.singapore-postgres.render.com',  # Replace with your database host
+        'PORT': '5432',  # Replace with your database port
+    }
+}
+
