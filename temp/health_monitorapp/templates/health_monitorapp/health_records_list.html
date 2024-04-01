@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Health Records List</title>
+    <style>
+        /* Reset CSS */
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        /* Global styles */
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f9f9f9;
+            color: #333;
+            margin: 0;
+            padding: 0;
+        }
+
+        h1 {
+            text-align: center;
+            margin: 20px 0;
+            color: #5b0e18; /* Maroon */
+        }
+
+        /* Navigation bar styles */
+        .navbar {
+            background-color: #284d28; /* Dark Green */
+            overflow: hidden;
+            width: 100%;
+            text-align: center;
+            padding: 10px 0;
+        }
+
+        .navbar a {
+            display: inline-block;
+            color: #fff;
+            text-decoration: none;
+            padding: 10px 20px;
+            margin: 0 10px;
+            transition: background-color 0.3s ease;
+        }
+
+        .navbar a:hover {
+            background-color: #5b0e18; /* Maroon */
+        }
+
+        /* Search bar styles */
+        .search-container {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .search-input {
+            width: 60%;
+            padding: 10px;
+            margin-bottom: 20px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            box-sizing: border-box;
+        }
+
+        /* Table styles */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+        }
+
+        th, td {
+            padding: 10px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+
+        th {
+            background-color: #5b0e18; /* Maroon */
+            color: #fff;
+        }
+
+        tr:hover {
+            background-color: #f2f2f2;
+        }
+
+        .edit-link, .delete-link {
+            text-decoration: none;
+            color: #5b0e18; /* Maroon */
+            margin-right: 10px;
+        }
+
+        .edit-link:hover, .delete-link:hover {
+            text-decoration: underline;
+        }
+
+        /* Pagination styles */
+        .pagination {
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        .pagination a {
+            color: #5b0e18; /* Maroon */
+            padding: 8px 16px;
+            text-decoration: none;
+            transition: background-color 0.3s;
+            border: 1px solid #ddd;
+        }
+
+        .pagination a.active {
+            background-color: #5b0e18; /* Maroon */
+            color: #fff;
+        }
+
+        .pagination a:hover:not(.active) {
+            background-color: #ddd;
+        }
+
+        /* Loading animation styles */
+        .loading-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(255, 255, 255, 0.8);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+        }
+
+        .loading-spinner {
+            border: 6px solid #f3f3f3; /* Light grey */
+            border-top: 6px solid #5b0e18; /* Maroon */
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 2s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+    <!-- Loading animation -->
+    <div class="loading-overlay" id="loadingOverlay">
+        <div class="loading-spinner"></div>
+    </div>
+
+    <!-- Navigation bar -->
+    <div class="navbar">
+        <a href="{% url 'dashboard' %}">Dashboard</a>
+        <a href="{% url 'user_profile' %}">User Profile</a>
+        <a href="{% url 'health_records_list' %}">Health Records</a>
+        <a href="{% url 'admin:index' %}" class="nav-link">Admin Panel</a>
+        <a href="{% url 'add_health_record' %}">Add Health Record</a>
+        <a href="#" onclick="logout()">Logout</a>
+    </div>
+
+    <h1>Health Records List</h1>
+
+    <!-- Search bar -->
+    <div class="search-container">
+        <input type="text" class="search-input" id="searchInput" placeholder="Search by Patient Name" oninput="searchRecords()">
+    </div>
+
+    <!-- Health Records Table -->
+    <table>
+        <thead>
+            <tr>
+                <th>Patient Name</th>
+                <th>Pulse Rate</th>
+                <th>Heart Rate</th>
+                <th>Blood Oxygen Level</th>
+                <th>Body Temperature</th>
+                <th>Weight</th>
+                <th>Height</th>
+                <th>Actions</th> <!-- Added a header for actions -->
+            </tr>
+        </thead>
+        <tbody id="recordsTableBody">
+            {% for record in page_obj %}
+            <tr>
+                <td>{{ record.user_name }}</td>
+                <td>{{ record.pulse_rate }}</td>
+                <td>{{ record.heart_rate }}</td>
+                <td>{{ record.blood_oxygen_level }}</td>
+                <td>{{ record.body_temperature }}</td>
+                <td>{{ record.body_weight }}</td>
+                <td>{{ record.height }}</td>  
+                <td>
+                    <a class="edit-link" href="{% url 'edit_health_record' record.pk %}">Edit</a> <!-- Edit link -->
+                    <a class="delete-link" href="{% url 'delete_health_record' record.pk %}">Delete</a> <!-- Delete link -->
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <!-- Pagination -->
+    <div class="pagination">
+        {% if records.has_previous %}
+            <a href="?page=1">&laquo; First</a>
+            <a href="?page={{ records.previous_page_number }}">Previous</a>
+        {% endif %}
+        <span class="current">Page {{ records.number }} of {{ records.paginator.num_pages }}</span>
+        {% if page_obj.has_next %}
+            <a href="?page={{ records.next_page_number }}">Next</a>
+            <a href="?page={{ records.paginator.num_pages }}">Last &raquo;</a>
+        {% endif %}
+    </div>
+
+    <script>
+        // Show loading animation
+        document.getElementById("loadingOverlay").style.display = "flex";
+
+        // Hide loading animation after the page loads
+        window.addEventListener("load", function() {
+            document.getElementById("loadingOverlay").style.display = "none";
+        });
+
+        // Function to filter records based on search input
+        function searchRecords() {
+            var input, filter, table, tr, td, i, txtValue;
+            input = document.getElementById("searchInput");
+            filter = input.value.toUpperCase();
+            table = document.getElementById("recordsTableBody");
+            tr = table.getElementsByTagName("tr");
+
+            // Loop through all table rows, and hide those that don't match the search query
+            for (i = 0; i < tr.length; i++) {
+                td = tr[i].getElementsByTagName("td")[0]; // Assuming patient name is in the first column
+                if (td) {
+                    txtValue = td.textContent || td.innerText;
+                    if (txtValue.toUpperCase().indexOf(filter) > -1) {
+                        tr[i].style.display = "";
+                    } else {
+                        tr[i].style.display = "none";
+                    }
+                }
+            }
+        }
+    </script>
+
+       <!-- JavaScript for handling logout -->
+       <script>
+        function logout() {
+            // Create a form element
+            var form = document.createElement("form");
+            form.method = "post";
+            form.action = "{% url 'user_logout' %}";  // Use the logout URL
+
+            // Add CSRF token
+            var csrfToken = document.createElement("input");
+            csrfToken.type = "hidden";
+            csrfToken.name = "csrfmiddlewaretoken";
+            csrfToken.value = "{{ csrf_token }}";  // Use Django template tag to get CSRF token
+            form.appendChild(csrfToken);
+
+            // Append form to body and submit
+            document.body.appendChild(form);
+            form.submit();
+        }
+    </script>
+</body>
+</html>

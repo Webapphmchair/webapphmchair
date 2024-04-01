@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edit Health Record</title>
+    <style>
+        /* Your CSS styles here */
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f9f9f9;
+            color: #333;
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            max-width: 500px;
+            margin: 50px auto;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        h1 {
+            text-align: center;
+            margin-bottom: 20px;
+            color: maroon; /* Updated color */
+        }
+        form {
+            margin-top: 20px;
+        }
+        label {
+            display: block;
+            margin-bottom: 5px;
+        }
+        input[type="text"] {
+            width: calc(100% - 12px);
+            padding: 8px;
+            margin-bottom: 10px;
+            border: 1px solid #ccc;
+            border-radius: 3px;
+            box-sizing: border-box;
+        }
+        button[type="submit"] {
+            width: 100%;
+            padding: 10px;
+            background-color: #800000; /* Dark Maroon */
+            color: #fff;
+            border: none;
+            border-radius: 3px;
+            cursor: pointer;
+        }
+        button[type="submit"]:hover {
+            background-color: #550000; /* Darker Maroon */
+        }
+        .delete-form button[type="submit"] {
+            background-color: #800000; /* Dark Maroon */
+        }
+        .delete-form button[type="submit"]:hover {
+            background-color: #550000; /* Darker Maroon */
+        }
+        .delete-form {
+            text-align: center;
+            margin-top: 20px;
+        }
+        /* Loading animation styles */
+        .loading-overlay {
+            display: none; /* Hide the loading overlay by default */
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(255, 255, 255, 0.8);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+            transition: opacity 0.3s;
+            pointer-events: none;
+        }
+
+        .loading-spinner {
+            border: 6px solid #f3f3f3;
+            border-top: 6px solid #800000; /* Dark Maroon */
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 2s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        /* Navigation bar styles */
+        .navbar {
+            background-color: #284d28; /* Dark Green */
+            overflow: hidden;
+            width: 100%;
+            text-align: center;
+            padding: 10px 0;
+            margin-bottom: 20px;
+        }
+        .navbar a {
+            display: inline-block;
+            color: #fff;
+            text-decoration: none;
+            padding: 10px 20px;
+            margin: 0 10px;
+            transition: background-color 0.3s ease;
+        }
+        .navbar a:hover {
+            background-color: #005600; /* Dark Green */
+        }
+    </style>
+</head>
+<body>
+    <!-- Loading animation -->
+    <div class="loading-overlay" id="loadingOverlay">
+        <div class="loading-spinner"></div>
+    </div>
+
+    <!-- Navigation bar -->
+    <div class="navbar">
+        <a href="{% url 'dashboard' %}">Dashboard</a>
+        <a href="{% url 'user_profile' %}">User Profile</a>
+        <a href="{% url 'health_records_list' %}">Health Records</a>
+        <a href="{% url 'admin:index' %}" class="nav-link">Admin Panel</a>
+        <a href="{% url 'add_health_record' %}">Add Health Record</a>
+        <a href="#" onclick="logout()">Logout</a>
+    </div>
+
+    <!-- Edit Health Record Form -->
+    <div class="container">
+        <h1>Edit Health Record</h1>
+        <form action="{% url 'edit_health_record' record.pk %}" method="post">
+            {% csrf_token %}
+            <label for="user_name">Patient Name:</label>
+            <input type="text" id="user_name" name="user_name" value="{{ record.user_name }}"><br>
+            <label for="pulse_rate">Pulse Rate:</label>
+            <input type="text" id="pulse_rate" name="pulse_rate" value="{{ record.pulse_rate }}"><br>
+            <label for="heart_rate">Heart Rate:</label>
+            <input type="text" id="heart_rate" name="heart_rate" value="{{ record.heart_rate }}"><br>
+            <label for="blood_oxygen_level">Blood Oxygen Level:</label>
+            <input type="text" id="blood_oxygen_level" name="blood_oxygen_level" value="{{ record.blood_oxygen_level }}"><br>
+            <label for="body_temperature">Body Temperature:</label>
+            <input type="text" id="body_temperature" name="body_temperature" value="{{ record.body_temperature }}"><br>
+            <label for="body_weight">Weight:</label>
+            <input type="text" id="body_weight" name="body_weight" value="{{ record.body_weight }}"><br>
+            <label for="height">Height:</label>
+            <input type="text" id="height" name="height" value="{{ record.height }}"><br>
+            <button type="submit">Update Record</button>
+        </form>
+
+        <!-- Link to delete health record -->
+        <form class="delete-form" action="{% url 'delete_health_record' record.pk %}" method="post">
+            {% csrf_token %}
+            <button type="submit">Delete Record</button>
+        </form>
+    </div>
+    <!-- JavaScript to hide the loading overlay -->
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            // Hide the loading overlay when the page finishes loading
+            var loadingOverlay = document.getElementById("loadingOverlay");
+            loadingOverlay.style.display = "none";
+        });
+    </script>
+       <!-- JavaScript for handling logout -->
+       <script>
+        function logout() {
+            // Create a form element
+            var form = document.createElement("form");
+            form.method = "post";
+            form.action = "{% url 'user_logout' %}";  // Use the logout URL
+
+            // Add CSRF token
+            var csrfToken = document.createElement("input");
+            csrfToken.type = "hidden";
+            csrfToken.name = "csrfmiddlewaretoken";
+            csrfToken.value = "{{ csrf_token }}";  // Use Django template tag to get CSRF token
+            form.appendChild(csrfToken);
+
+            // Append form to body and submit
+            document.body.appendChild(form);
+            form.submit();
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Delete Health Record</title>
+    <style>
+        /* Your CSS styles here */
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f9f9f9;
+            color: #333;
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            max-width: 400px;
+            margin: 100px auto;
+            background-color: #fff;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            text-align: center;
+        }
+        h1 {
+            margin-bottom: 20px;
+            color: maroon; /* Updated color */
+        }
+        p {
+            margin-bottom: 20px;
+        }
+        form button[type="submit"] {
+            background-color: #800000; /* Dark Maroon */
+            color: #fff;
+            border: none;
+            padding: 10px 20px;
+            font-size: 1.1rem;
+            border-radius: 5px;
+            text-decoration: none;
+            transition: background-color 0.3s ease;
+            cursor: pointer;
+        }
+        form button[type="submit"]:hover {
+            background-color: #550000; /* Darker Maroon */
+        }
+        /* Navigation bar styles */
+        .navbar {
+            background-color: #284d28; /* Dark Green */
+            overflow: hidden;
+            text-align: center;
+            padding: 10px 0;
+        }
+        .navbar a {
+            display: inline-block;
+            color: #fff;
+            text-decoration: none;
+            padding: 10px 20px;
+            margin: 0 10px;
+            transition: background-color 0.3s ease;
+        }
+        .navbar a:hover {
+            background-color: #005600; /* Dark Green */
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation bar -->
+    <div class="navbar">
+        <a href="{% url 'dashboard' %}">Dashboard</a>
+        <a href="{% url 'user_profile' %}">User Profile</a>
+        <a href="{% url 'health_records_list' %}">Health Records</a>
+        <a href="{% url 'admin:index' %}" class="nav-link">Admin Panel</a>
+        <a href="{% url 'add_health_record' %}">Add Health Record</a>
+        <a href="#" onclick="logout()">Logout</a>
+    </div>
+
+    <div class="container">
+        <h1>Delete Health Record</h1>
+        <p>Are you sure you want to delete the health record for {{ record.patient_name }}?</p>
+        <form action="{% url 'delete_health_record' record.pk %}" method="post">
+            {% csrf_token %}
+            <button type="submit">Delete Record</button>
+        </form>
+           <!-- JavaScript for handling logout -->
+    <script>
+        function logout() {
+            // Create a form element
+            var form = document.createElement("form");
+            form.method = "post";
+            form.action = "{% url 'user_logout' %}";  // Use the logout URL
+
+            // Add CSRF token
+            var csrfToken = document.createElement("input");
+            csrfToken.type = "hidden";
+            csrfToken.name = "csrfmiddlewaretoken";
+            csrfToken.value = "{{ csrf_token }}";  // Use Django template tag to get CSRF token
+            form.appendChild(csrfToken);
+
+            // Append form to body and submit
+            document.body.appendChild(form);
+            form.submit();
+        }
+    </script>
+    </div>
+</body>
+</html>

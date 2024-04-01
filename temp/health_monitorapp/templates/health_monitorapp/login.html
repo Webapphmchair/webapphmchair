@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <style>
+        /* Reset CSS */
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        /* Global styles */
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f9f9f9;
+            color: #333;
+            margin: 0;
+            padding: 0;
+            line-height: 1.6;
+        }
+
+        /* Navigation bar styles */
+        .navbar {
+            background-color: #284d28; /* Dark Green */
+            overflow: hidden;
+            text-align: center;
+            padding: 10px 0;
+            margin-bottom: 20px;
+        }
+
+        .navbar a {
+            display: inline-block;
+            color: #fff;
+            text-decoration: none;
+            padding: 10px 20px;
+            margin: 0 10px;
+            transition: background-color 0.3s ease;
+        }
+
+        .navbar a:hover {
+            background-color: #005600; /* Dark Green */
+        }
+
+        /* Container styles */
+        .container {
+            max-width: 400px;
+            margin: 50px auto;
+            background-color: #fff;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .container h1 {
+            text-align: center;
+            color: maroon; /* Updated color */
+            margin-bottom: 30px;
+        }
+
+        /* Form styles */
+        form {
+            text-align: center;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 10px;
+            color: #555;
+        }
+
+        input[type="text"],
+        input[type="password"] {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 20px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            box-sizing: border-box;
+            transition: border-color 0.3s ease;
+        }
+
+        input[type="text"]:focus,
+        input[type="password"]:focus {
+            border-color: maroon; /* Updated color */
+        }
+
+        button {
+            width: 100%;
+            padding: 12px;
+            background-color: maroon; /* Updated color */
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        button:hover {
+            background-color: #800000; /* Dark Maroon */
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation bar -->
+    <div class="navbar">
+        <a href="{% url 'dashboard' %}">Dashboard</a>
+        <a href="{% url 'user_profile' %}">User Profile</a>
+        <a href="{% url 'health_records_list' %}">Health Records</a>
+        <a href="{% url 'admin:index' %}" class="nav-link">Admin Panel</a>
+        <a href="{% url 'add_health_record' %}">Add Health Record</a>
+        <!-- Use JavaScript to handle logout -->
+        <a href="#" onclick="logout()">Logout</a>
+        <!-- Add more navigation links as needed -->
+    </div>
+
+    <!-- Login form container -->
+    <div class="container">
+        <h1><i class="fas fa-sign-in-alt"></i> Login</h1> <!-- Decorative Icon -->
+        <!-- Display error messages -->
+        {% if messages %}
+            <ul style="color: red;">
+                {% for message in messages %}
+                    <li>{{ message }}</li>
+                {% endfor %}
+            </ul>
+        {% endif %}
+        <!-- Login form -->
+        <form method="post" action="{% url 'login' %}">
+            {% csrf_token %}
+            <label for="username">User Name:</label>
+            <input type="text" id="username" name="username" autocomplete="username" required><br>
+            <label for="password">Password:</label>
+            <input type="password" id="password" name="password" autocomplete="current-password" required><br>
+            <button type="submit">Login</button>
+        </form>
+    </div>
+
+    <!-- JavaScript for handling logout -->
+    <script>
+        function logout() {
+            // Create a form element
+            var form = document.createElement("form");
+            form.method = "post";
+            form.action = "{% url 'user_logout' %}";  // Use the logout URL
+
+            // Add CSRF token
+            var csrfToken = document.createElement("input");
+            csrfToken.type = "hidden";
+            csrfToken.name = "csrfmiddlewaretoken";
+            csrfToken.value = "{{ csrf_token }}";  // Use Django template tag to get CSRF token
+            form.appendChild(csrfToken);
+
+            // Append form to body and submit
+            document.body.appendChild(form);
+            form.submit();
+        }
+    </script>
+</body>
+</html>

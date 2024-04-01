@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Profile</title>
+    <style>
+        /* Reset CSS */
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        /* Global styles */
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f5f5f5;
+            color: #333;
+            margin: 0;
+            padding: 0;
+            line-height: 1.6;
+        }
+
+        header {
+            background-color: #800000; /* Dark Maroon */
+            color: #fff;
+            padding: 20px;
+            text-align: center;
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+        }
+
+        main {
+            padding: 20px;
+        }
+
+        .profile-section, .update-section, .password-section, .status-section {
+            background-color: #fff;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            margin-bottom: 20px;
+            text-align: left;
+        }
+
+        h2 {
+            color: #800000; /* Dark Maroon */
+            font-size: 1.8rem;
+            margin-bottom: 15px;
+        }
+
+        form label {
+            display: block;
+            margin-bottom: 5px;
+            color: #555; /* Dark Grey */
+        }
+
+        form input[type="text"],
+        form input[type="email"],
+        form input[type="password"] {
+            width: calc(100% - 22px); /* Adjusted width to fit container */
+            padding: 10px;
+            margin-bottom: 15px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            box-sizing: border-box;
+        }
+
+        form button[type="submit"] {
+            background-color: #800000; /* Dark Maroon */
+            color: #fff;
+            border: none;
+            padding: 10px 20px;
+            font-size: 1rem; /* Adjusted button font size */
+            border-radius: 5px;
+            text-decoration: none;
+            transition: background-color 0.3s ease;
+            cursor: pointer;
+            display: block;
+            width: 100%;
+            max-width: 200px; /* Limit button width */
+            margin: 0 auto; /* Center align button */
+            margin-top: 10px;
+            text-align: center; /* Align text to center */
+        }
+
+        form button[type="submit"]:hover {
+            background-color: #550000; /* Darker Maroon */
+        }
+
+        .dashboard-btn {
+            background-color: #284d28; /* Dark Green */
+            color: #fff;
+            border: none;
+            padding: 10px 20px;
+            font-size: 1rem; /* Adjusted button font size */
+            border-radius: 5px;
+            text-decoration: none;
+            transition: background-color 0.3s ease;
+            margin-top: 15px;
+            display: block;
+            width: 100%;
+            max-width: 200px; /* Limit button width */
+            margin: 0 auto; /* Center align button */
+            text-align: center; /* Align text to center */
+        }
+
+        .dashboard-btn:hover {
+            background-color: #005600; /* Dark Green */
+        }
+
+        /* Navigation bar styles */
+        nav {
+            background-color: #284d28; /* Dark Green */
+            overflow: hidden;
+            text-align: center;
+            padding: 10px 20px; /* Increased padding */
+            margin-bottom: 20px; /* Added margin bottom for separation */
+        }
+    
+        nav a, .logout-btn {
+            display: inline-block;
+            color: #f2f2f2;
+            text-align: center;
+            padding: 14px 16px;
+            text-decoration: none;
+            transition: background-color 0.3s ease;
+        }
+    
+        nav a:hover, .logout-btn:hover {
+            background-color: #005600; /* Dark Green */
+            color: #fff;
+        }
+
+        .logout-btn {
+            background-color: #800000; /* Dark Maroon */
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .logout-btn:hover {
+            background-color: #550000; /* Darker Maroon */
+        }
+
+        /* Clear floats after the navigation links */
+        nav::after {
+            content: "";
+            clear: both;
+            display: table;
+        }
+
+        /* Improved profile information layout */
+        .profile-info {
+            list-style: none;
+            padding: 0;
+            margin-bottom: 15px;
+        }
+
+        .profile-info li {
+            margin-bottom: 10px;
+        }
+
+        .profile-info li strong {
+            display: inline-block;
+            width: 120px; /* Adjusted width for better alignment */
+        }
+
+        /* Adjusted alignment for buttons in profile sections */
+        .profile-section button,
+        .update-section button,
+        .password-section button,
+        .status-section button,
+        .dashboard-btn {
+            margin-left: 0; /* Align buttons to the left */
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation bar -->
+    <nav>
+        <a href="{% url 'dashboard' %}">Dashboard</a>
+        <a href="{% url 'health_records_list' %}">Health Records</a>
+        <a href="{% url 'admin:index' %}" class="nav-link">Admin Panel</a>
+        <button onclick="logout()" class="logout-btn">Logout</button>
+    </nav>
+
+    <header>
+        <h1>User Profile</h1>
+    </header>
+
+    <main>
+        <section class="profile-section">
+            <h2>Profile Information</h2>
+            <ul class="profile-info">
+                <li><strong>Username:</strong> {{ user.username }}</li>
+                <li><strong>Email:</strong> {{ user.email }}</li>
+                <!-- Add other profile information fields here -->
+            </ul>
+        </section>
+
+        <section class="update-section">
+            <h2>Update Profile</h2>
+            <form method="post" action="{% url 'user_profile' %}">
+                {% csrf_token %}
+                <label for="email">Email:</label>
+                <input type="email" id="email" name="email" value="{{ user.email }}" required><br><br>
+                <!-- Add other fields as needed -->
+                <button type="submit">Update</button>
+            </form>
+        </section>
+
+        <section class="password-section">
+            <h2>Change Password</h2>
+            <form method="post" action="{% url 'change_password' %}">
+                {% csrf_token %}
+                <label for="old_password">Old Password:</label>
+                <input type="password" id="old_password" name="old_password" required><br><br>
+                <label for="new_password1">New Password:</label>
+                <input type="password" id="new_password1" name="new_password1" required><br><br>
+                <label for="new_password2">Confirm New Password:</label>
+                <input type="password" id="new_password2" name="new_password2" required><br><br>
+                <button type="submit">Change Password</button>
+            </form>
+        </section>
+
+        <section class="status-section">
+            <h2>Account Status</h2>
+            <!-- Display account status here -->
+            {% if user.is_staff %}
+                <p>Account Type: Admin</p>
+                <a href="{% url 'approve_accounts' %}" class="dashboard-btn">Approve Account</a>
+            {% else %}
+                <p>Account Type: User</p>
+            {% endif %}
+        </section>
+    </main>
+
+    <footer>
+        <p>Health Monitoring Dashboard &copy; 2024</p>
+    </footer>
+
+    <script>
+        // Function to handle logout
+        function logout() {
+            window.location.href = "{% url 'user_logout' %}";
+        }
+    </script>
+</body>
+</html>

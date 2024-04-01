@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Health Monitoring Dashboard</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <style>
+        /* Reset CSS */
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        /* Global styles */
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f2f2f2; /* Light Gray */
+            color: #333;
+            margin: 0;
+            padding: 0;
+            line-height: 1.6;
+        }
+
+        /* Header styles */
+        header {
+            background: linear-gradient(to right, #660000, #990000); /* Gradient Background */
+            color: #fff;
+            padding: 20px;
+            text-align: center;
+            border-bottom: 2px solid #660000;
+            position: relative;
+        }
+
+        header h1 {
+            font-size: 3rem;
+            margin-bottom: 20px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            font-weight: bold;
+            margin-top: 20px; /* Adjusted margin */
+        }
+
+        /* Navigation styles */
+        nav {
+            background-color: #284d28;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            padding: 15px 0;
+            text-align: center;
+        }
+
+        nav a {
+            text-decoration: none;
+            color: #fff;
+            padding: 10px 20px;
+            margin: 0 10px;
+            font-size: 1.1rem;
+            transition: color 0.3s ease;
+            border-radius: 5px;
+        }
+
+        nav a:hover {
+            color: #800000; /* Dark Maroon */
+            background-color: #d3d3d3; /* Light Gray */
+        }
+
+        /* Main content styles */
+        main {
+            background-color: #f2f2f2; /* Light Gray */
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            flex-wrap: wrap;
+            margin-bottom: 10px; /* Adjusted margin */
+        }
+
+        .dashboard-card {
+            background-color: #fff;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            width: calc(33.33% - 40px);
+            transition: transform 0.3s ease;
+            text-align: left;
+            margin-bottom: 20px;
+        }
+
+        .dashboard-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .dashboard-card h3 {
+            color: maroon;
+            font-size: 1.3rem; /* Adjusted font size */
+            margin-bottom: 10px;
+        }
+
+        .dashboard-card p {
+            color: #555;
+            font-size: 1.1rem;
+            line-height: 1.4;
+        }
+
+        .dashboard-card i {
+            float: left;
+            color: maroon;
+            font-size: 2rem;
+            margin-right: 10px;
+        }
+
+        /* Signup button */
+        .signup-btn {
+            background-color: maroon;
+            color: #fff;
+            border: none;
+            padding: 12px 24px;
+            font-size: 1.1rem;
+            border-radius: 5px;
+            text-decoration: none;
+            transition: background-color 0.3s ease;
+            margin-top: 10px; /* Adjusted margin */
+            display: block;
+            width: fit-content;
+            margin: auto; /* Center the button horizontally */
+            position: relative;
+            bottom: 0; /* Adjusted position */
+            z-index: 1; /* Ensure the button appears above other content */
+            cursor: pointer;
+        }
+
+        .signup-btn:hover {
+            background-color: #800000; /* Dark Maroon */
+        }
+
+        /* Footer styles */
+        footer {
+            background-color: maroon;
+            color: #fff;
+            padding: 20px 0;
+            text-align: center;
+            width: 100%;
+            position: relative; /* Change position to relative */
+            bottom: 0;
+            left: 0;
+            margin-top: 10px; /* Adjusted margin */
+        }
+
+        footer p {
+            font-size: 0.9rem;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1><i class="fas fa-heartbeat"></i> Health Monitoring Dashboard</h1> <!-- Decorative Icon -->
+    </header>
+
+    <nav>
+        <a href="/dashboard"><i class="fas fa-tachometer-alt"></i> Dashboard</a>
+        <a href="/login"><i class="fas fa-sign-in-alt"></i> Login</a>
+        <a href="#" onclick="logout()"><i class="fas fa-sign-out-alt"></i> Logout</a>
+        <a href="/health-records"><i class="fas fa-file-medical"></i> Health Records</a>
+        <a href="/add-health-record"><i class="fas fa-plus"></i> Add Health Record</a>
+        <a href="/user-profile"><i class="fas fa-user"></i> User Profile</a>
+        <a href="/admin" class="admin-link"><i class="fas fa-cog"></i> Admin</a>
+    </nav>
+
+    <main>
+        <div class="dashboard-card">
+            <i class="fas fa-user"></i>
+            <h3>Patient Overview</h3>
+            <p>View and manage patient records, add new records, and delete records.</p>
+        </div>
+
+        <div class="dashboard-card">
+            <i class="fas fa-user-plus"></i>
+            <h3>Account Registration</h3>
+            <p>Sign up for an account and wait for approval.</p>
+        </div>
+
+        <div class="dashboard-card">
+            <i class="fas fa-user-cog"></i>
+            <h3>User Profile</h3>
+            <p>Manage your profile settings and preferences.</p>
+        </div>
+
+        <div class="dashboard-card">
+            <i class="fas fa-exclamation-triangle"></i>
+            <h3>Emergency Hotline</h3>
+            <p><strong>BFP CABANATUAN:</strong> (044)-9583701 / 0943-303-4279<br>
+            <strong>CDRRMO RESCUE TEAM:</strong> (044)-940-0161 / 0908-881-1010</p>
+        </div>
+
+        <div class="dashboard-card">
+            <i class="fas fa-briefcase-medical"></i>
+            <h3>Featured Services</h3>
+            <p>Explore the services offered by the school clinic, including first aid, health consultations, vaccinations, and health education programs.</p>
+        </div>
+    </main>
+
+    <!-- Signup button -->
+    <a href="{% url 'signup' %}" class="signup-btn">Sign Up</a>
+
+    <!-- JavaScript for handling logout -->
+    <script>
+        function logout() {
+            // Create a form element
+            var form = document.createElement("form");
+            form.method = "post";
+            form.action = "{% url 'user_logout' %}";  // Use the logout URL
+
+            // Add CSRF token
+            var csrfToken = document.createElement("input");
+            csrfToken.type = "hidden";
+            csrfToken.name = "csrfmiddlewaretoken";
+            csrfToken.value = "{{ csrf_token }}";  // Use Django template tag to get CSRF token
+            form.appendChild(csrfToken);
+
+            // Append form to body and submit
+            document.body.appendChild(form);
+            form.submit();
+        }
+    </script>
+    <!-- Footer -->
+    <footer>
+        <p>Health Monitoring Dashboard &copy; 2024</p>
+    </footer>
+</body>
+</html>
