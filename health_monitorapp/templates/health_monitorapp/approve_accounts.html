@@ -68,6 +68,18 @@
         .nav-btn:hover {
             color: #550000; /* Darker Maroon */
         }
+
+         /* Responsive styles */
+        @media screen and (max-width: 768px) {
+            form {
+                flex-direction: column; /* Stack elements vertically on smaller screens */
+            }
+            select, button {
+                width: 100%; /* Make select and button full width on smaller screens */
+                margin-left: 0; /* Remove left margin on smaller screens */
+                margin-top: 20px; /* Adjusted margin for spacing */
+            }
+        }
     </style>
 </head>
 <body>
