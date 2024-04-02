@@ -64,11 +64,16 @@
             box-sizing: border-box;
         }
 
+        /* Table container */
+        .table-container {
+            overflow-x: auto; /* Horizontally scrollable */
+            margin-bottom: 20px;
+        }
+
         /* Table styles */
         table {
             width: 100%;
             border-collapse: collapse;
-            margin-bottom: 20px;
         }
 
         th, td {
@@ -178,40 +183,43 @@
         <input type="text" class="search-input" id="searchInput" placeholder="Search by Patient Name" oninput="searchRecords()">
     </div>
 
-    <!-- Health Records Table -->
-    <table>
-        <thead>
-            <tr>
-                <th>Timestamp</th>
-                <th>Patient Name</th>
-                <th>Pulse Rate</th>
-                <th>Heart Rate</th>
-                <th>Blood Oxygen Level</th>
-                <th>Body Temperature</th>
-                <th>Weight</th>
-                <th>Height</th>
-                <th>Actions</th> <!-- Added a header for actions -->
-            </tr>
-        </thead>
-        <tbody id="recordsTableBody">
-            {% for record in page_obj %}
-            <tr>
-                <td>{{ record.timestamp }}</td>
-                <td>{{ record.user_name }}</td>
-                <td>{{ record.pulse_rate }}</td>
-                <td>{{ record.heart_rate }}</td>
-                <td>{{ record.blood_oxygen_level }}</td>
-                <td>{{ record.body_temperature }}</td>
-                <td>{{ record.body_weight }}</td>
-                <td>{{ record.height }}</td>  
-                <td>
-                    <a class="edit-link" href="{% url 'edit_health_record' record.pk %}">Edit</a> <!-- Edit link -->
-                    <a class="delete-link" href="{% url 'delete_health_record' record.pk %}">Delete</a> <!-- Delete link -->
-                </td>
-            </tr>
-            {% endfor %}
-        </tbody>
-    </table>
+    <!-- Table container -->
+    <div class="table-container">
+        <!-- Health Records Table -->
+        <table>
+            <thead>
+                <tr>
+                    <th>Timestamp</th>
+                    <th>Patient Name</th>
+                    <th>Pulse Rate</th>
+                    <th>Heart Rate</th>
+                    <th>Blood Oxygen Level</th>
+                    <th>Body Temperature</th>
+                    <th>Weight</th>
+                    <th>Height</th>
+                    <th>Actions</th> <!-- Added a header for actions -->
+                </tr>
+            </thead>
+            <tbody id="recordsTableBody">
+                {% for record in page_obj %}
+                <tr>
+                    <td>{{ record.timestamp }}</td>
+                    <td>{{ record.user_name }}</td>
+                    <td>{{ record.pulse_rate }}</td>
+                    <td>{{ record.heart_rate }}</td>
+                    <td>{{ record.blood_oxygen_level }}</td>
+                    <td>{{ record.body_temperature }}</td>
+                    <td>{{ record.body_weight }}</td>
+                    <td>{{ record.height }}</td>  
+                    <td>
+                        <a class="edit-link" href="{% url 'edit_health_record' record.pk %}">Edit</a> <!-- Edit link -->
+                        <a class="delete-link" href="{% url 'delete_health_record' record.pk %}">Delete</a> <!-- Delete link -->
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
 
     <!-- Pagination -->
     <div class="pagination">
@@ -258,8 +266,8 @@
         }
     </script>
 
-       <!-- JavaScript for handling logout -->
-       <script>
+    <!-- JavaScript for handling logout -->
+    <script>
         function logout() {
             // Create a form element
             var form = document.createElement("form");
