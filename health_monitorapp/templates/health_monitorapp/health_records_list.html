@@ -175,6 +175,7 @@
     <table>
         <thead>
             <tr>
+                <th>Timestamp</th>
                 <th>Patient Name</th>
                 <th>Pulse Rate</th>
                 <th>Heart Rate</th>
@@ -188,6 +189,7 @@
         <tbody id="recordsTableBody">
             {% for record in page_obj %}
             <tr>
+                <td>{{ record.timestamp }}</td>
                 <td>{{ record.user_name }}</td>
                 <td>{{ record.pulse_rate }}</td>
                 <td>{{ record.heart_rate }}</td>
