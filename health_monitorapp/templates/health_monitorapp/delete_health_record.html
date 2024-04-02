@@ -61,6 +61,18 @@
         .navbar a:hover {
             background-color: #005600; /* Dark Green */
         }
+
+        /* Responsive styles */
+        @media screen and (max-width: 768px) {
+            .container {
+                max-width: 100%; /* Adjusted max-width for smaller screens */
+                margin: 50px auto; /* Adjusted margin for centering on smaller screens */
+                padding: 10px; /* Adjusted padding for smaller screens */
+            }
+            form button[type="submit"] {
+                width: 100%; /* Make button full width on smaller screens */
+            }
+        }
     </style>
 </head>
 <body>
