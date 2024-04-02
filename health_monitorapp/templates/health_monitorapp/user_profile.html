@@ -178,6 +178,26 @@
         .dashboard-btn {
             margin-left: 0; /* Align buttons to the left */
         }
+
+          /* Responsive styles */
+        @media screen and (max-width: 768px) {
+            nav a, .logout-btn {
+                padding: 10px; /* Adjusted padding for smaller screens */
+            }
+            header h1 {
+                font-size: 2rem; /* Adjusted font size for smaller screens */
+            }
+            main {
+                padding: 10px; /* Adjusted padding for smaller screens */
+            }
+            .profile-section, .update-section, .password-section, .status-section {
+                padding: 15px; /* Adjusted padding for smaller screens */
+                margin-bottom: 15px; /* Adjusted margin bottom for smaller screens */
+            }
+            form button[type="submit"], .dashboard-btn {
+                font-size: 0.9rem; /* Adjusted button font size for smaller screens */
+            }
+        }
     </style>
 </head>
 <body>
