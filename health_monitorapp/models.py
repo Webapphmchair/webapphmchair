@@ -82,7 +82,7 @@ class CustomUser(AbstractUser):
         verbose_name = "Custom User"
         verbose_name_plural = "Custom Users"
         permissions = [
-            ("view_customuser", "Can view custom user"),
+            ("view_custom_user", "Can view custom user"),
         ]
 
 # Add related_name to avoid clash with auth.User
