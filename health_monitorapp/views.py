@@ -12,7 +12,7 @@ from django.contrib.auth.forms import PasswordChangeForm
 from django.contrib.auth import update_session_auth_hash
 from .models import HealthRecord
 from .forms import HealthRecordForm 
-
+from django.db.models import Case, When, F, FloatField, CharField, Value, ExpressionWrapper
 # Password View
 from django.contrib.auth.tokens import default_token_generator
 from django.contrib.auth.models import User
@@ -75,7 +75,7 @@ def user_login(request):
             user = authenticate(username=username, password=password)
             if user is not None:
                 login(request, user)
-                messages.info(request, "You are now logged in as {username}")
+                messages.info(request, f"You are now logged in as {username}")
                 return redirect('dashboard')
             else:
                 messages.error(request, "Invalid username or password.")
@@ -197,16 +197,76 @@ def health_records_list(request):
     query = request.GET.get('q')
 
     if query:
-        records = records.filter(user_name__icontains=query)  # Assuming user_name is the field to search for
+        records = records.filter(user_name__icontains=query)
 
-    # Pagination
-    paginator = Paginator(records, 10)  # Show 10 records per page
+    # Add interpretation for temperature
+    records = records.annotate(
+        body_temperature_status=Case(
+            When(body_temperature__gte=37.5, then=Value('Fever')),
+            When(body_temperature__lt=35.5, then=Value('Hypothermia')),
+            When(body_temperature__gte=35.5, body_temperature__lt=37.5, then=Value('Normal')),
+            default=Value('Abnormal'),
+            output_field=CharField()  # Import CharField from django.db.models
+        )
+    )
+
+    # Add interpretation for pulse rate
+    records = records.annotate(
+        pulse_rate_status=Case(
+            When(pulse_rate__lt=60, then=Value('Bradycardia')),
+            When(pulse_rate__gte=100, then=Value('Tachycardia')),
+            When(pulse_rate__gte=60, pulse_rate__lt=100, then=Value('Normal')),
+            default=Value('Abnormal'),
+            output_field=CharField()  # Import CharField from django.db.models
+        )
+    )
+
+    # Add interpretation for heart rate
+    records = records.annotate(
+        heart_rate_status=Case(
+            When(heart_rate__lt=60, then=Value('Bradycardia')),
+            When(heart_rate__gte=100, then=Value('Tachycardia')),
+            When(heart_rate__gte=60, heart_rate__lt=100, then=Value('Normal')),
+            default=Value('Abnormal'),
+            output_field=CharField()  # Import CharField from django.db.models
+        )
+    )
+
+    # Add interpretation for blood oxygen level
+    records = records.annotate(
+        blood_oxygen_level_status=Case(
+            When(blood_oxygen_level__lt=90, then=Value('Hypoxemia')),
+            When(blood_oxygen_level__gte=90, blood_oxygen_level__lt=95, then=Value('Low')),
+            When(blood_oxygen_level__gte=95, then=Value('Normal')),
+            default=Value('Abnormal'),
+            output_field=CharField()  # Import CharField from django.db.models
+        )
+    )
+
+    # Calculate BMI
+    records = records.annotate(
+        bmi=ExpressionWrapper(
+            F('body_weight') / (F('height') / 100) ** 2,
+            output_field=FloatField()
+        ),
+        bmi_status=Case(
+    When(bmi__lt=18.5, then=Value('Underweight')),
+    When(bmi__gte=18.5, bmi__lt=25, then=Value('Normal')),
+    When(bmi__gte=25, bmi__lt=30, then=Value('Overweight')),
+    When(bmi__gte=30, then=Value('Obese')),
+    default=Value('Abnormal'),
+    output_field=CharField()
+)
+    )
+
+    paginator = Paginator(records, 10)
     page_number = request.GET.get('page')
     page_obj = paginator.get_page(page_number)
+    
     context = {
-        'records': records,
- }
-    return render(request, 'health_monitorapp/health_records_list.html', {'page_obj': page_obj})
+        'page_obj': page_obj
+    }
+    return render(request, 'health_monitorapp/health_records_list.html', context)
 
 @login_required
 def add_health_record(request):
@@ -279,3 +339,4 @@ def dashboard(request):
     # Placeholder for dashboard functionality
     # Implement your dashboard logic here
     return render(request, 'health_monitorapp/dashboard.html')
+
