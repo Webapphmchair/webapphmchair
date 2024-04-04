@@ -216,6 +216,18 @@
                         <a class="delete-link" href="{% url 'delete_health_record' record.pk %}">Delete</a> <!-- Delete link -->
                     </td>
                 </tr>
+                <tr>
+                    <td colspan="9">
+                        <strong>Interpretation:</strong> <br>
+                        <ul>
+                            <li>Pulse Rate: {% if record.pulse_rate_status %} {{ record.pulse_rate_status }} {% else %} No interpretation {% endif %}</li>
+                            <li>Heart Rate: {% if record.heart_rate_status %} {{ record.heart_rate_status }} {% else %} No interpretation {% endif %}</li>
+                            <li>Blood Oxygen Level: {% if record.blood_oxygen_level_status %} {{ record.blood_oxygen_level_status }} {% else %} No interpretation {% endif %}</li>
+                            <li>Body Temperature: {% if record.body_temperature_status %} {{ record.body_temperature_status }} {% else %} No interpretation {% endif %}</li>
+                            <li>BMI: {% if record.bmi_status %} {{ record.bmi_status }} {% else %} No interpretation {% endif %}</li>
+                        </ul>
+                    </td>
+                </tr>
                 {% endfor %}
             </tbody>
         </table>
@@ -223,14 +235,14 @@
 
     <!-- Pagination -->
     <div class="pagination">
-        {% if records.has_previous %}
+        {% if page_obj.has_previous %}
             <a href="?page=1">&laquo; First</a>
-            <a href="?page={{ records.previous_page_number }}">Previous</a>
+            <a href="?page={{ page_obj.previous_page_number }}">Previous</a>
         {% endif %}
-        <span class="current">Page {{ records.number }} of {{ records.paginator.num_pages }}</span>
+        <span class="current">Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}</span>
         {% if page_obj.has_next %}
-            <a href="?page={{ records.next_page_number }}">Next</a>
-            <a href="?page={{ records.paginator.num_pages }}">Last &raquo;</a>
+            <a href="?page={{ page_obj.next_page_number }}">Next</a>
+            <a href="?page={{ page_obj.paginator.num_pages }}">Last &raquo;</a>
         {% endif %}
     </div>
 
@@ -264,10 +276,8 @@
                 }
             }
         }
-    </script>
 
-    <!-- JavaScript for handling logout -->
-    <script>
+        // Function to handle logout
         function logout() {
             // Create a form element
             var form = document.createElement("form");
