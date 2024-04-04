@@ -30,39 +30,47 @@ class HealthRecord(models.Model):
         return bmi
 
     def get_status(self):
-        """Returns a simple diagnosis based on recorded parameters."""
-        status = []
+        """Returns a dictionary containing interpretations for each parameter."""
+        status = {}
 
         if self.pulse_rate < 60:
-            status.append("Low pulse rate")
+            status['pulse_rate'] = "Low pulse rate"
         elif self.pulse_rate > 100:
-            status.append("High pulse rate")
+            status['pulse_rate'] = "High pulse rate"
+        else:
+            status['pulse_rate'] = "Normal pulse rate"
 
         if self.heart_rate < 60:
-            status.append("Low heart rate")
+            status['heart_rate'] = "Low heart rate"
         elif self.heart_rate > 100:
-            status.append("High heart rate")
+            status['heart_rate'] = "High heart rate"
+        else:
+            status['heart_rate'] = "Normal heart rate"
 
         if self.blood_oxygen_level < 90:
-            status.append("Low blood oxygen level")
+            status['blood_oxygen_level'] = "Low blood oxygen level"
+        else:
+            status['blood_oxygen_level'] = "Normal blood oxygen level"
 
         if self.body_temperature < 36.1:
-            status.append("Low body temperature")
+            status['body_temperature'] = "Low body temperature"
         elif self.body_temperature > 37.2:
-            status.append("High body temperature")
+            status['body_temperature'] = "High body temperature"
+        else:
+            status['body_temperature'] = "Normal body temperature"
 
         bmi = self.get_bmi()
         if bmi is not None:
             if bmi < 18.5:
-                status.append("Underweight")
+                status['bmi'] = "Underweight"
             elif bmi >= 18.5 and bmi < 25:
-                status.append("Normal weight")
+                status['bmi'] = "Normal weight"
             elif bmi >= 25 and bmi < 30:
-                status.append("Overweight")
+                status['bmi'] = "Overweight"
             else:
-                status.append("Obese")
+                status['bmi'] = "Obese"
 
-        return status if status else ["Normal"]
+        return status
 
 # Add a new field to the CustomUser model to track approval status
 class CustomUser(AbstractUser):
@@ -73,12 +81,10 @@ class CustomUser(AbstractUser):
     class Meta:
         verbose_name = "Custom User"
         verbose_name_plural = "Custom Users"
+        permissions = [
+            ("view_customuser", "Can view custom user"),
+        ]
 
 # Add related_name to avoid clash with auth.User
 CustomUser._meta.get_field('groups').remote_field.related_name = 'custom_user_groups'
 CustomUser._meta.get_field('user_permissions').remote_field.related_name = 'custom_user_permissions'
-
-class Meta:
-        permissions = [
-            ("view_customuser", "Can view custom user"),
-        ]
