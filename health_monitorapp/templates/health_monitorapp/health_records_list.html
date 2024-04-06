@@ -256,27 +256,32 @@
         });
 
         // Function to filter records based on search input
-        function searchRecords() {
-            var input, filter, table, tr, td, i, txtValue;
-            input = document.getElementById("searchInput");
-            filter = input.value.toUpperCase();
-            table = document.getElementById("recordsTableBody");
-            tr = table.getElementsByTagName("tr");
+function searchRecords() {
+    var input, filter, table, tr, td, i, txtValue;
+    input = document.getElementById("searchInput");
+    filter = input.value.toUpperCase();
+    table = document.getElementById("recordsTableBody");
+    tr = table.getElementsByTagName("tr");
 
-            // Loop through all table rows, and hide those that don't match the search query
-            for (i = 0; i < tr.length; i++) {
-                td = tr[i].getElementsByTagName("td")[1]; // Assuming patient name is in the first column
-                if (td) {
-                    txtValue = td.textContent || td.innerText;
-                    if (txtValue.toUpperCase().indexOf(filter) > -1) {
-                        tr[i].style.display = "";
-                    } else {
-                        tr[i].style.display = "none";
-                    }
+    // Loop through all table rows, and hide those that don't match the search query
+    for (i = 0; i < tr.length; i++) {
+        td = tr[i].getElementsByTagName("td")[1]; // Assuming patient name is in the first column
+        if (td) {
+            txtValue = td.textContent || td.innerText;
+            if (txtValue.toUpperCase().indexOf(filter) > -1) {
+                tr[i].style.display = ""; // Show the record row
+                if (i + 1 < tr.length) {
+                    tr[i + 1].style.display = ""; // Show the interpretation row if it exists
+                }
+            } else {
+                tr[i].style.display = "none"; // Hide the record row
+                if (i + 1 < tr.length) {
+                    tr[i + 1].style.display = "none"; // Hide the interpretation row if it exists
                 }
             }
         }
-
+    }
+}
         // Function to handle logout
         function logout() {
             // Create a form element
