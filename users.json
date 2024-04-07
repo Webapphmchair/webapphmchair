@@ -1,1 +1,1 @@
-[{"model": "health_monitorapp.customuser", "pk": 2, "fields": {"password": "pbkdf2_sha256$720000$KaODHLxOoulQ4VrsWCUFkn$4xDkGs8mzlWfmnO2rLXXm5VDb9fVb0+nZUyrJ6g+oC8=", "last_login": "2024-04-07T05:19:37.381Z", "is_superuser": true, "username": "admin", "first_name": "", "last_name": "", "email": "webapphmchair@gmail.com", "is_staff": true, "date_joined": "2024-04-01T07:56:24.491Z", "user_name": "", "is_approved": true, "is_active": true, "groups": [], "user_permissions": []}}]
+
