@@ -25,7 +25,7 @@ SECRET_KEY = 'django-insecure-y1davuu)@*o&#wtl9%%a4x6r3u$_^09ezku_&6(4dz=ckl5o^g
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['webapphmchair_postgresql_rg6h','healthhub-dho5.onrender.com']
 
 AUTH_USER_MODEL = 'health_monitorapp.CustomUser'
 
