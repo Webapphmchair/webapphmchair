@@ -135,7 +135,7 @@ LOGOUT_REDIRECT_URL = '/login/'
 
 CSRF_COOKIE_DOMAIN = None
 
-CSRF_TRUSTED_ORIGINS = ['http://localhost']
+CSRF_TRUSTED_ORIGINS = ['http://localhost', 'https://healthhub-dho5.onrender.com']
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.0/ref/settings/#default-auto-field
