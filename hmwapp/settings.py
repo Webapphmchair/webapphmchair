@@ -25,7 +25,7 @@ SECRET_KEY = 'django-insecure-y1davuu)@*o&#wtl9%%a4x6r3u$_^09ezku_&6(4dz=ckl5o^g
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['webapphmchair.onrender.com']
+ALLOWED_HOSTS = []
 
 AUTH_USER_MODEL = 'health_monitorapp.CustomUser'
 
@@ -80,16 +80,6 @@ WSGI_APPLICATION = 'hmwapp.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/5.0/ref/settings/#databases
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'postgres',     # Database name
-        'USER': 'postgres',     # Username
-        'PASSWORD': '.t;72_+Kia]0',  # Password for the user 'postgres'
-        'HOST': 'localhost',    # Hostname where PostgreSQL is running
-        'PORT': '5432',         # Port number PostgreSQL is listening on
-    }
-}
 
 
 # Password validation
@@ -139,7 +129,7 @@ LOGOUT_REDIRECT_URL = '/login/'
 
 CSRF_COOKIE_DOMAIN = None
 
-CSRF_TRUSTED_ORIGINS = ['http://localhost', 'https://webapphmchair.onrender.com']
+CSRF_TRUSTED_ORIGINS = ['http://localhost']
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.0/ref/settings/#default-auto-field
@@ -158,10 +148,10 @@ DEFAULT_FROM_EMAIL = 'webapphostemail@gmail.com'  # The default email address to
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'webapphmchair_postgresql',  # Replace with your database name
-        'USER': 'webapphmchair_postgresql_user',  # Replace with your database username
-        'PASSWORD': '7EPME2QsohiofN0KkFxzCUbTVJYtFlbl',  # Replace with your database password
-        'HOST': 'dpg-co545kv79t8c739dmh70-a.singapore-postgres.render.com',  # Replace with your database host
+        'NAME': 'webapphmchair_postgresql_rg6h',  # Replace with your database name
+        'USER': 'webapphmchair_postgresql_rg6h_user',  # Replace with your database username
+        'PASSWORD': 'KL6xXYLI8vmmseoQEGC9Snt3569CEZrP',  # Replace with your database password
+        'HOST': 'dpg-co933ji0si5c7395jrl0-a.singapore-postgres.render.com',  # Replace with your database host
         'PORT': '5432',  # Replace with your database port
     }
 }
