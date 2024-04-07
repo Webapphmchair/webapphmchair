@@ -65,6 +65,38 @@
             background-color: #d3d3d3; /* Light Gray */
         }
 
+        /* Dropdown menu for small screens */
+        .dropdown-content {
+            display: none;
+            position: absolute;
+            background-color: #284d28;
+            min-width: 160px;
+            box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2);
+            z-index: 1;
+        }
+
+        .dropdown-content a {
+            color: white;
+            padding: 12px 16px;
+            text-decoration: none;
+            display: block;
+        }
+
+        .dropdown-content a:hover {
+            background-color: #800000; /* Dark Maroon */
+        }
+
+        .dropdown {
+            display: none;
+            position: relative;
+            text-align: center;
+        }
+
+        /* Show the dropdown menu on click */
+        .show {
+            display: block;
+        }
+
         /* Main content styles */
         main {
             background-color: #f2f2f2; /* Light Gray */
@@ -81,7 +113,7 @@
             border-radius: 10px;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
             padding: 20px;
-            width: calc(100% - 40px);
+            width: calc(100% - 40px); /* Adjusted width */
             transition: transform 0.3s ease;
             text-align: left;
             margin-bottom: 20px;
@@ -151,10 +183,56 @@
             font-size: 0.9rem;
         }
 
-         /* Media queries for responsiveness */
+        /* Media queries for responsiveness */
         @media only screen and (min-width: 768px) {
             .dashboard-card {
                 width: calc(33.33% - 40px);
+            }
+        }
+
+        @media only screen and (max-width: 767px) {
+            nav {
+                display: none;
+            }
+
+            .dropdown {
+                display: block;
+            }
+
+            .dropdown button {
+                background-color: #284d28;
+                color: white;
+                padding: 12px 24px;
+                font-size: 1.1rem;
+                border: none;
+                cursor: pointer;
+                width: 100%;
+                margin-bottom: 10px; /* Adjusted margin */
+            }
+
+            .dropdown-content {
+                display: none;
+                position: absolute;
+                background-color: #284d28;
+                min-width: 160px;
+                box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2);
+                z-index: 1;
+                width: 100%; /* Adjusted width */
+                left: 0;
+                top: 100%;
+            }
+
+            .dropdown-content a {
+                padding: 10px;
+                width: 100%; /* Adjusted width */
+            }
+
+            .dropdown-content a:hover {
+                background-color: #800000; /* Dark Maroon */
+            }
+
+            .dropdown:hover .dropdown-content {
+                display: block;
             }
         }
     </style>
@@ -173,6 +251,20 @@
         <a href="/user-profile"><i class="fas fa-user"></i> User Profile</a>
         <a href="/admin" class="admin-link"><i class="fas fa-cog"></i> Admin</a>
     </nav>
+
+    <!-- Dropdown menu for small screens -->
+    <div class="dropdown">
+        <button class="dropbtn" onclick="toggleDropdown()">Menu</button>
+        <div class="dropdown-content">
+            <a href="/dashboard"><i class="fas fa-tachometer-alt"></i> Dashboard</a>
+            <a href="/login"><i class="fas fa-sign-in-alt"></i> Login</a>
+            <a href="#" onclick="logout()"><i class="fas fa-sign-out-alt"></i> Logout</a>
+            <a href="/health-records"><i class="fas fa-file-medical"></i> Health Records</a>
+            <a href="/add-health-record"><i class="fas fa-plus"></i> Add Health Record</a>
+            <a href="/user-profile"><i class="fas fa-user"></i> User Profile</a>
+            <a href="/admin" class="admin-link"><i class="fas fa-cog"></i> Admin</a>
+        </div>
+    </div>
 
     <main>
         <div class="dashboard-card">
@@ -210,7 +302,7 @@
     <!-- Signup button -->
     <a href="{% url 'signup' %}" class="signup-btn">Sign Up</a>
 
-    <!-- JavaScript for handling logout -->
+    <!-- JavaScript for handling logout and dropdown menu -->
     <script>
         function logout() {
             // Create a form element
@@ -229,10 +321,30 @@
             document.body.appendChild(form);
             form.submit();
         }
+
+        function toggleDropdown() {
+            var dropdownContent = document.querySelector(".dropdown-content");
+            dropdownContent.classList.toggle("show");
+        }
+
+        // Close dropdown when clicking outside of it
+        window.onclick = function(event) {
+            if (!event.target.matches('.dropbtn')) {
+                var dropdowns = document.getElementsByClassName("dropdown-content");
+                var i;
+                for (i = 0; i < dropdowns.length; i++) {
+                    var openDropdown = dropdowns[i];
+                    if (openDropdown.classList.contains('show')) {
+                        openDropdown.classList.remove('show');
+                    }
+                }
+            }
+        }
     </script>
+
     <!-- Footer -->
     <footer>
-        <p>Health Monitoring Dashboard &copy; 2024</p>
+        <p>HCPSMSHS Health Hub &copy; 2024</p>
     </footer>
 </body>
 </html>
