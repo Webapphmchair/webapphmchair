@@ -54,6 +54,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+     'corsheaders.middleware.CorsMiddleware',
 ]
 
 ROOT_URLCONF = 'hmwapp.urls'
@@ -76,6 +77,10 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'hmwapp.wsgi.application'
 
+# CORS configuration
+CORS_ALLOWED_ORIGINS = [
+    'https://healthhub-dho5.onrender.com',  # Add the origin you want to allow
+]
 
 # Database
 # https://docs.djangoproject.com/en/5.0/ref/settings/#databases
