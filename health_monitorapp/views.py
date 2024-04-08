@@ -318,7 +318,7 @@ def edit_health_record(request, pk):
             updated_record.save()
             print("Health record updated successfully!")
             messages.success(request, 'Health record updated successfully!')
-            return redirect(request.META.get('HTTP_REFERER', 'health_records_list'))  # Redirect to previous page
+            return redirect('health_records_list')  # Redirect to health records list after successful edit
         else:
             print("Form is not valid:", form.errors)
             messages.error(request, 'Error occurred while updating health record. Please check the form.')
