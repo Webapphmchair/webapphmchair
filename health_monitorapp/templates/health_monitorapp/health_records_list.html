@@ -158,6 +158,85 @@
                 width: 100%; /* Make search input full width on smaller screens */
             }
         }
+
+        /* Comment section styles */
+        .comments-section {
+            margin-top: 10px;
+        }
+
+        .comment-input-container {
+            display: flex;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+
+        .comment-input {
+            flex: 1;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            box-sizing: border-box;
+        }
+
+        .comment-submit-btn {
+            padding: 10px;
+            background-color: #5b0e18;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .comment-submit-btn:hover {
+            background-color: #8b2332; /* Darker Maroon */
+        }
+
+        .comments-section ul {
+            list-style-type: none;
+            padding-left: 0;
+        }
+
+        .comment {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            padding: 10px;
+        }
+
+        .comment-actions {
+            display: flex;
+            align-items: center;
+        }
+
+        .comment-actions form {
+            display: flex;
+            align-items: center;
+        }
+
+        .comment-edit-input {
+            margin-right: 10px;
+        }
+
+        .comment-save-btn,
+        .comment-delete-btn {
+            padding: 5px 10px;
+            margin-left: 5px;
+            background-color: #5b0e18;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .comment-save-btn:hover,
+        .comment-delete-btn:hover {
+            background-color: #8b2332; /* Darker Maroon */
+        }
     </style>
 </head>
 <body>
@@ -228,6 +307,45 @@
                         </ul>
                     </td>
                 </tr>
+                <!-- Comment section -->
+                <tr>
+                    <td colspan="9">
+                        <form method="post" action="{% url 'add_comment' health_record_id=record.id %}">
+                            {% csrf_token %}
+                            <input type="hidden" name="health_record_id" value="{{ record.id }}">
+                            <div class="comment-input-container">
+                                <input type="text" name="text" placeholder="Add a comment..." class="comment-input">
+                                <button type="submit" class="comment-submit-btn">Submit</button>
+                            </div>
+                        </form>
+                        <div class="comments-section">
+                            <ul>
+                                {% for comment in record.record_comments.all %}
+                                    <li>
+                                        <div class="comment">
+                                            <div class="comment-text">
+                                                {{ comment.text }}
+                                            </div>
+                                            <div class="comment-actions">
+                                                <form method="post" action="{% url 'edit_comment' comment_id=comment.id %}" class="edit-comment-form">
+                                                    {% csrf_token %}
+                                                    <input type="hidden" name="comment_id" value="{{ comment.id }}">
+                                                    <input type="text" name="text" value="{{ comment.text }}" class="comment-edit-input">
+                                                    <button type="submit" class="comment-save-btn">Save</button>
+                                                </form>
+                                                <form method="post" action="{% url 'delete_comment' comment_id=comment.id %}" class="delete-comment-form">
+                                                    {% csrf_token %}
+                                                    <input type="hidden" name="comment_id" value="{{ comment.id }}">
+                                                    <button type="submit" class="comment-delete-btn">Delete</button>
+                                                </form>
+                                            </div>
+                                        </div>
+                                    </li>
+                                {% endfor %}
+                            </ul>
+                        </div>
+                    </td>
+                </tr>
                 {% endfor %}
             </tbody>
         </table>
@@ -246,6 +364,7 @@
         {% endif %}
     </div>
 
+    <!-- JavaScript -->
     <script>
         // Show loading animation
         document.getElementById("loadingOverlay").style.display = "flex";
@@ -256,32 +375,39 @@
         });
 
         // Function to filter records based on search input
-function searchRecords() {
-    var input, filter, table, tr, td, i, txtValue;
-    input = document.getElementById("searchInput");
-    filter = input.value.toUpperCase();
-    table = document.getElementById("recordsTableBody");
-    tr = table.getElementsByTagName("tr");
+        function searchRecords() {
+            var input, filter, table, tr, td, i, txtValue;
+            input = document.getElementById("searchInput");
+            filter = input.value.toUpperCase();
+            table = document.getElementById("recordsTableBody");
+            tr = table.getElementsByTagName("tr");
 
-    // Loop through all table rows, and hide those that don't match the search query
-    for (i = 0; i < tr.length; i++) {
-        td = tr[i].getElementsByTagName("td")[1]; // Assuming patient name is in the first column
-        if (td) {
-            txtValue = td.textContent || td.innerText;
-            if (txtValue.toUpperCase().indexOf(filter) > -1) {
-                tr[i].style.display = ""; // Show the record row
-                if (i + 1 < tr.length) {
-                    tr[i + 1].style.display = ""; // Show the interpretation row if it exists
-                }
-            } else {
-                tr[i].style.display = "none"; // Hide the record row
-                if (i + 1 < tr.length) {
-                    tr[i + 1].style.display = "none"; // Hide the interpretation row if it exists
+            // Loop through all table rows, and hide those that don't match the search query
+            for (i = 0; i < tr.length; i++) {
+                td = tr[i].getElementsByTagName("td")[1]; // Assuming patient name is in the first column
+                if (td) {
+                    txtValue = td.textContent || td.innerText;
+                    if (txtValue.toUpperCase().indexOf(filter) > -1) {
+                        tr[i].style.display = ""; // Show the record row
+                        if (i + 1 < tr.length) {
+                            tr[i + 1].style.display = ""; // Show the interpretation row if it exists
+                        }
+                        if (i + 2 < tr.length) {
+                            tr[i + 2].style.display = ""; // Show the comment section if it exists
+                        }
+                    } else {
+                        tr[i].style.display = "none"; // Hide the record row
+                        if (i + 1 < tr.length) {
+                            tr[i + 1].style.display = "none"; // Hide the interpretation row if it exists
+                        }
+                        if (i + 2 < tr.length) {
+                            tr[i + 2].style.display = "none"; // Hide the comment section if it exists
+                        }
+                    }
                 }
             }
         }
-    }
-}
+
         // Function to handle logout
         function logout() {
             // Create a form element
