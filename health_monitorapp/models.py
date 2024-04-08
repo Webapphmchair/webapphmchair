@@ -11,6 +11,7 @@ class HealthRecord(models.Model):
     body_temperature = models.FloatField(validators=[MinValueValidator(0)], verbose_name="Body Temperature (°C)")
     height = models.FloatField(validators=[MinValueValidator(0)], blank=True, null=True, verbose_name="Height (cm)")
     body_weight = models.FloatField(validators=[MinValueValidator(0)], blank=True, null=True, verbose_name="Body Weight (kg)")
+    comments = models.ManyToManyField('Comment', related_name='health_records')
 
     class Meta:
         verbose_name = "Health Record"
@@ -71,6 +72,16 @@ class HealthRecord(models.Model):
                 status['bmi'] = "Obese"
 
         return status
+    
+class Comment(models.Model):
+    health_record = models.ForeignKey(HealthRecord, on_delete=models.CASCADE, related_name='record_comments')
+    user = models.ForeignKey('CustomUser', on_delete=models.CASCADE)
+    timestamp = models.DateTimeField(auto_now_add=True)
+    text = models.TextField()
+
+    class Meta:
+        verbose_name = "Comment"
+        verbose_name_plural = "Comments"
 
 # Add a new field to the CustomUser model to track approval status
 class CustomUser(AbstractUser):
