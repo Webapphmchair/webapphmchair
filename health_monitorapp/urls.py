@@ -19,6 +19,9 @@ urlpatterns = [
     path('export-health-records/', views.export_health_records, name='export_health_records'),
     path('import-health-records/', views.import_health_records, name='import_health_records'),
     path('admin/', admin.site.urls),
+    path('add-comment/<int:health_record_id>/', views.add_comment, name='add_comment'), 
+    path('edit-comment/<int:comment_id>/', views.edit_comment, name='edit_comment'),
+    path('delete-comment/<int:comment_id>/', views.delete_comment, name='delete_comment'),
     path('health_monitorapp/', include('django.contrib.auth.urls')),  
 
     path('user-profile/', views.user_profile, name='user_profile'),
